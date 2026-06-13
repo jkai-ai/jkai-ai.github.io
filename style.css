@@ -1,0 +1,389 @@
+/* ============================================================
+   style.css — GitHub Pages 학습용 스타일시트
+   초보자도 쉽게 이해할 수 있도록 섹션별로 주석을 달았습니다.
+   ============================================================ */
+
+/* ── 1. 기본 리셋 & 전역 변수 ─────────────────────────────── */
+:root {
+  /* 색상 팔레트 — 이 변수들을 바꾸면 전체 색상이 한 번에 변경됩니다 */
+  --bg:          #f5f4f0;        /* 페이지 배경 (따뜻한 오프화이트) */
+  --surface:     #fffffe;        /* 카드·섹션 배경 */
+  --border:      #e4e2dc;        /* 구분선 색상 */
+  --text-main:   #1c1c1e;        /* 제목 텍스트 */
+  --text-body:   #4a4a52;        /* 본문 텍스트 */
+  --text-muted:  #8e8e99;        /* 보조 텍스트 (날짜, 출처 등) */
+  --accent:      #3d6b4f;        /* 강조색 (차분한 포레스트 그린) */
+  --accent-light: rgba(61, 107, 79, 0.08);  /* 강조색 연하게 */
+  --quote-color: #2b4a38;        /* 명언 텍스트 색상 */
+
+  /* 타이포그래피 */
+  --font-serif:  'Noto Serif KR', 'Georgia', serif;   /* 명언 등 강조 텍스트 */
+  --font-sans:   'Pretendard', 'Noto Sans KR', sans-serif;  /* 일반 텍스트 */
+
+  /* 레이아웃 */
+  --max-width:   1100px;
+  --radius:      12px;
+  --shadow:      0 2px 16px rgba(0,0,0,0.06);
+}
+
+/* 모든 요소의 box-sizing을 border-box로 통일 (레이아웃 계산이 직관적) */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;  /* 부드러운 스크롤 */
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg);
+  color: var(--text-body);
+  line-height: 1.7;
+  font-size: 16px;
+}
+
+/* ── 2. 헤더 & 네비게이션 ──────────────────────────────────── */
+header {
+  position: sticky;           /* 스크롤해도 상단에 고정 */
+  top: 0;
+  z-index: 100;
+  background: rgba(245, 244, 240, 0.92);
+  backdrop-filter: blur(10px);  /* 반투명 블러 효과 */
+  border-bottom: 1px solid var(--border);
+  padding: 0 24px;
+}
+
+.header-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-logo {
+  font-family: var(--font-serif);
+  font-size: 1.1rem;
+  color: var(--text-main);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.site-logo span {
+  color: var(--accent);
+}
+
+nav a {
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.875rem;
+  margin-left: 24px;
+  transition: color 0.2s;
+}
+
+nav a:hover {
+  color: var(--accent);
+}
+
+/* ── 3. 히어로 섹션 (명언 배경) ────────────────────────────── */
+.hero {
+  /* 배경 이미지: 차분한 자연 패턴. url()에 이미지 경로를 넣으세요 */
+  background-image:
+    linear-gradient(
+      to bottom,
+      rgba(245, 244, 240, 0.85) 0%,
+      rgba(245, 244, 240, 0.92) 100%
+    ),
+    url('https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1600&q=60&auto=format');
+  background-size: cover;
+  background-position: center;
+  padding: 80px 24px 64px;
+  text-align: center;
+}
+
+/* ── 4. 명언 (Quote) 섹션 ──────────────────────────────────── */
+.quote-section {
+  max-width: 780px;
+  margin: 0 auto;
+}
+
+.quote-label {
+  display: inline-block;
+  font-size: 0.75rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 4px 14px;
+  border-radius: 100px;
+  margin-bottom: 32px;
+}
+
+/* 영어 명언 본문 */
+.quote-text {
+  font-family: var(--font-serif);
+  font-size: clamp(1.35rem, 3.5vw, 2rem);  /* 화면 크기에 따라 자동 조절 */
+  font-weight: 400;
+  line-height: 1.55;
+  color: var(--quote-color);
+  font-style: italic;
+  margin-bottom: 20px;
+  position: relative;
+  padding: 0 20px;
+}
+
+/* 인용 부호 장식 */
+.quote-text::before {
+  content: '\201C';  /* 왼쪽 따옴표 */
+  position: absolute;
+  left: -10px;
+  top: -10px;
+  font-size: 4rem;
+  color: var(--accent);
+  opacity: 0.2;
+  font-style: normal;
+  line-height: 1;
+}
+
+/* 한글 해석 */
+.quote-translation {
+  font-size: 1rem;
+  color: var(--text-body);
+  margin-bottom: 8px;
+}
+
+/* 명언 출처 */
+.quote-author {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* 명언 새로고침 버튼 */
+.quote-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  padding: 10px 24px;
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: 100px;
+  font-size: 0.875rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: opacity 0.2s, transform 0.2s;
+}
+
+.quote-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+/* ── 5. 메인 콘텐츠 영역 ────────────────────────────────────── */
+main {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 48px 24px 80px;
+}
+
+/* ── 6. 섹션 공통 스타일 ────────────────────────────────────── */
+.content-section {
+  margin-bottom: 56px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-title {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
+  letter-spacing: -0.01em;
+}
+
+/* 마지막 업데이트 표시 */
+.section-meta {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+/* ── 7. 카드 그리드 ─────────────────────────────────────────── */
+.card-grid {
+  display: grid;
+  /* 최소 280px, 최대 1fr로 자동으로 열 개수 조절 */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+/* ── 8. 개별 카드 ───────────────────────────────────────────── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;   /* 내용을 세로로 배치 */
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.09);
+}
+
+/* 카드 상단: 카테고리 배지 + 날짜 */
+.card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+/* 카테고리 배지 */
+.card-category {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  background: var(--accent-light);
+  padding: 3px 10px;
+  border-radius: 100px;
+}
+
+/* 날짜 */
+.card-date {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* 카드 제목 */
+.card-title {
+  font-size: 0.97rem;
+  font-weight: 600;
+  color: var(--text-main);
+  line-height: 1.45;
+  margin-bottom: 10px;
+  letter-spacing: -0.01em;
+}
+
+/* 카드 요약 */
+.card-summary {
+  font-size: 0.845rem;
+  color: var(--text-body);
+  line-height: 1.65;
+  margin-bottom: 18px;
+  flex: 1;  /* 남은 공간을 채워서 버튼이 항상 하단에 오도록 */
+}
+
+/* 출처 */
+.card-source {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* 더 보기 링크 버튼 */
+.card-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--accent);
+  text-decoration: none;
+  padding: 7px 16px;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  align-self: flex-start;   /* 버튼 너비가 내용에 맞게 */
+  transition: background 0.2s, color 0.2s;
+}
+
+.card-link:hover {
+  background: var(--accent);
+  color: white;
+}
+
+/* ── 9. 로딩 & 에러 상태 ────────────────────────────────────── */
+.status-msg {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.status-msg .spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 12px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── 10. 푸터 ───────────────────────────────────────────────── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 28px 24px;
+  text-align: center;
+}
+
+.footer-inner {
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+footer p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  line-height: 1.8;
+}
+
+footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+/* ── 11. 반응형 (모바일) ────────────────────────────────────── */
+/* 화면 너비가 640px 이하일 때 적용 */
+@media (max-width: 640px) {
+  .hero {
+    padding: 56px 20px 48px;
+  }
+
+  .quote-text {
+    font-size: 1.2rem;
+    padding: 0 8px;
+  }
+
+  .card-grid {
+    grid-template-columns: 1fr;  /* 모바일에서는 한 줄에 하나씩 */
+  }
+
+  nav a {
+    display: none;  /* 좁은 화면에서는 네비 링크 숨김 (필요시 햄버거 메뉴로 대체) */
+  }
+}
