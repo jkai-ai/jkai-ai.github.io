@@ -1,8 +1,14 @@
 {
-  "last_updated": "2026-06-13 15:17:30",
-  "temp": 20.0,
-  "description": "대체로 맑음",
-  "outfit": "긴팔 셔츠, 얇은 가디건, 슬랙스 또는 청바지",
-  "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=60&auto=format",
-  "link": "https://www.musinsa.com/search/musinsa/news?q=봄+가을+가디건+코디"
+  "last_updated": "2026-06-13 16:00:17",
+  "temp": 27,
+  "description": "가벼운 이슬비",
+  "outfit": "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. 어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. 접이식 우산도 잊지 마세요.",
+  "image": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format",
+  "link": "https://www.musinsa.com/search/musinsa/news?q=레인코트+비+코디",
+  "date": "2026-06-13",
+  "region": "서울",
+  "temp_min": 19,
+  "temp_max": 27,
+  "rain": "0.3mm 예상",
+  "dust": "보통 (36㎍/㎥)"
 }
