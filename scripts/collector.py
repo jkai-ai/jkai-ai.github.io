@@ -45,65 +45,100 @@ BIZINFO_ROW_SELECTOR   = "table tbody tr"       # 테이블 행
 BIZINFO_TITLE_SELECTOR = "td:nth-of-type(3) a"  # 제목 링크
 BIZINFO_PERIOD_INDEX   = 4                       # 접수기간 열 번호
 
-OPEN_METEO_URL = (
-    "https://api.open-meteo.com/v1/forecast"
-    "?latitude=37.5665&longitude=126.9780"
-    "&current_weather=true&timezone=Asia%2FSeoul"
-)
+# 서울 좌표 (Open-Meteo 공개 API, 키 불필요)
+SEOUL_LAT = 37.5665
+SEOUL_LON = 126.9780
+OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
+OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
-# ── 날씨 코드 → 설명 매핑 ──────────────────────────────────────
-# Open-Meteo WMO 날씨 코드표 (자주 쓰이는 것만 발췌)
-WMO_DESCRIPTIONS = {
-    0:  "맑음",
-    1:  "대체로 맑음", 2: "구름 조금", 3: "흐림",
-    45: "안개", 48: "짙은 안개",
-    51: "이슬비", 53: "이슬비", 55: "짙은 이슬비",
-    61: "비", 63: "비", 65: "강한 비",
-    71: "눈", 73: "눈", 75: "강한 눈",
-    80: "소나기", 81: "소나기", 82: "강한 소나기",
-    95: "뇌우", 96: "뇌우+우박", 99: "강한 뇌우+우박",
+# ── 날씨 코드 → 설명 매핑 (WMO Weather Interpretation Codes) ──
+WEATHER_CODES = {
+    0: "맑음",
+    1: "대체로 맑음", 2: "부분적으로 흐림", 3: "흐림",
+    45: "안개", 48: "결빙 안개",
+    51: "가벼운 이슬비", 53: "이슬비", 55: "진한 이슬비",
+    61: "약한 비", 63: "비", 65: "강한 비",
+    71: "약한 눈", 73: "눈", 75: "강한 눈",
+    80: "소나기", 81: "강한 소나기", 82: "폭우",
+    95: "뇌우", 99: "뇌우 + 우박",
 }
 
-# ── 기온별 코디 정보 ───────────────────────────────────────────
-# 온도 구간(최소기온)을 내림차순으로 정렬해서 체크합니다
-OUTFIT_TABLE = [
-    {
-        "min_temp": 28,
-        "outfit": "민소매, 반팔, 반바지, 린넨 소재 추천",
-        "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format",
-        "query": "여름+민소매+코디"
-    },
-    {
-        "min_temp": 23,
-        "outfit": "반팔 티셔츠, 면 반바지, 얇은 원피스",
-        "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=60&auto=format",
-        "query": "여름+반팔+코디"
-    },
-    {
-        "min_temp": 18,
-        "outfit": "긴팔 셔츠, 얇은 가디건, 슬랙스 또는 청바지",
-        "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=60&auto=format",
-        "query": "봄+가을+가디건+코디"
-    },
-    {
-        "min_temp": 12,
-        "outfit": "맨투맨, 자켓, 청바지, 얇은 코트",
-        "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=60&auto=format",
-        "query": "가을+자켓+코디"
-    },
-    {
-        "min_temp": 5,
-        "outfit": "두꺼운 니트, 코트, 목도리, 레이어링 추천",
-        "image": "https://images.unsplash.com/photo-1512327428049-2a6dd4c3f0f3?w=800&q=60&auto=format",
-        "query": "겨울+코트+코디"
-    },
-    {
-        "min_temp": -99,
-        "outfit": "패딩, 두꺼운 코트, 목도리, 장갑, 방한 부츠",
-        "image": "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=60&auto=format",
-        "query": "겨울+패딩+방한+코디"
-    },
-]
+
+def get_outfit(temp_max, temp_min, rain):
+    """날씨 조건에 따라 코디 문장과 참고 이미지 URL을 반환합니다."""
+    is_rainy = rain != "없음"
+    temp_diff = temp_max - temp_min
+
+    if is_rainy:
+        text = (
+            "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. "
+            "어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. "
+            "접이식 우산도 잊지 마세요."
+        )
+        img = "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format"
+        query = "레인코트+비+코디"
+    elif temp_max >= 27:
+        text = (
+            f"최고 {temp_max}°C의 더운 날씨입니다. "
+            "반팔 티셔츠, 린넨 셔츠, 가벼운 면 팬츠를 추천합니다. "
+            "자외선 차단을 위해 선크림과 가벼운 모자를 챙기세요."
+        )
+        img = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format"
+        query = "여름+반팔+코디"
+    elif temp_max >= 18:
+        if temp_diff >= 10:
+            text = (
+                f"일교차가 {temp_diff}°C로 큽니다. "
+                "아침저녁엔 얇은 겉옷이나 가디건을 챙기고, "
+                "낮에는 가볍게 반팔 또는 얇은 긴팔 티셔츠를 입으세요."
+            )
+            img = "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=60&auto=format"
+            query = "봄+가을+가디건+코디"
+        else:
+            text = (
+                "활동하기 좋은 선선한 날씨입니다. "
+                "얇은 긴팔 티셔츠나 맨투맨에 청바지 조합이 잘 어울립니다. "
+                "얇은 가디건을 하나 챙기면 완벽합니다."
+            )
+            img = "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=60&auto=format"
+            query = "봄+가을+맨투맨+코디"
+    else:
+        text = (
+            f"최고 기온이 {temp_max}°C의 쌀쌀한 날씨입니다. "
+            "니트, 코트, 머플러를 추천합니다. "
+            "두꺼운 한 겹보다 얇은 레이어드 스타일이 체온 조절에 효과적입니다."
+        )
+        img = "https://images.unsplash.com/photo-1511401139252-f158d3209c17?w=800&q=60&auto=format"
+        query = "겨울+코트+코디"
+
+    return text, img, query
+
+
+def fetch_pm10_dust():
+    """Open-Meteo Air Quality API로 서울 미세먼지(PM10) 등급을 반환합니다."""
+    res = requests.get(
+        OPEN_METEO_AIR_QUALITY_URL,
+        params={
+            "latitude": SEOUL_LAT,
+            "longitude": SEOUL_LON,
+            "hourly": "pm10",
+            "timezone": "Asia/Seoul",
+            "forecast_days": 1,
+        },
+        timeout=10,
+    )
+    res.raise_for_status()
+    pm10 = res.json()["hourly"]["pm10"][12]  # 정오 기준
+
+    if pm10 is None:
+        return "데이터 없음"
+    if pm10 < 30:
+        return f"좋음 ({pm10:.0f}㎍/㎥)"
+    if pm10 < 80:
+        return f"보통 ({pm10:.0f}㎍/㎥)"
+    if pm10 < 150:
+        return f"나쁨 ({pm10:.0f}㎍/㎥)"
+    return f"매우 나쁨 ({pm10:.0f}㎍/㎥)"
 
 
 def now_str():
@@ -127,45 +162,78 @@ def save_json(path, data):
 # ══════════════════════════════════════════════════════════════
 def collect_weather():
     """
-    Open-Meteo 공개 API로 서울 날씨를 가져옵니다.
+    Open-Meteo 공개 API로 서울 일별 날씨·공기질을 가져옵니다.
     API 키가 필요 없고 무료입니다.
-    기온에 따라 코디 정보를 자동으로 매칭합니다.
+    최고/최저 기온, 강수, 미세먼지를 반영해 코디를 생성합니다.
     """
     print("\n[1] 날씨 수집 중...")
+    today = datetime.now().strftime("%Y-%m-%d")
+
     try:
-        # API 호출 (응답 형식: JSON)
-        res = requests.get(OPEN_METEO_URL, timeout=10)
-        res.raise_for_status()                      # HTTP 에러 시 예외 발생
-        raw = res.json()["current_weather"]
+        res = requests.get(
+            OPEN_METEO_FORECAST_URL,
+            params={
+                "latitude": SEOUL_LAT,
+                "longitude": SEOUL_LON,
+                "daily": (
+                    "weathercode,temperature_2m_max,"
+                    "temperature_2m_min,precipitation_sum"
+                ),
+                "timezone": "Asia/Seoul",
+                "forecast_days": 1,
+            },
+            timeout=10,
+        )
+        res.raise_for_status()
+        daily = res.json()["daily"]
 
-        temp   = raw["temperature"]                 # 기온 (°C)
-        code   = raw["weathercode"]                 # 날씨 코드 (WMO 표준)
-        desc   = WMO_DESCRIPTIONS.get(code, "알 수 없음")
+        code     = daily["weathercode"][0]
+        temp_max = round(daily["temperature_2m_max"][0])
+        temp_min = round(daily["temperature_2m_min"][0])
+        precip   = daily["precipitation_sum"][0]
 
-        # 기온에 맞는 코디 찾기
-        outfit_info = OUTFIT_TABLE[-1]              # 기본값: 가장 추운 경우
-        for row in OUTFIT_TABLE:
-            if temp >= row["min_temp"]:
-                outfit_info = row
-                break
+        desc = WEATHER_CODES.get(code, "날씨 정보 없음")
+        rain = f"{precip}mm 예상" if precip and precip > 0 else "없음"
+
+        try:
+            dust = fetch_pm10_dust()
+        except Exception as e:
+            print(f"  [경고] 공기질 수집 실패: {e}")
+            dust = "정보 없음"
+
+        outfit_text, outfit_image, outfit_query = get_outfit(temp_max, temp_min, rain)
 
         data = {
+            # 프론트엔드 호환 필드
             "last_updated": now_str(),
-            "temp":         temp,
+            "temp":         temp_max,
             "description":  desc,
-            "outfit":       outfit_info["outfit"],
-            "image":        outfit_info["image"],
-            "link":         f"https://www.musinsa.com/search/musinsa/news?q={outfit_info['query']}",
+            "outfit":       outfit_text,
+            "image":        outfit_image,
+            "link": (
+                "https://www.musinsa.com/search/musinsa/news"
+                f"?q={outfit_query}"
+            ),
+            # 추가 수집 필드 (향후 UI 확장용)
+            "date":     today,
+            "region":   "서울",
+            "temp_min": temp_min,
+            "temp_max": temp_max,
+            "rain":     rain,
+            "dust":     dust,
         }
         save_json("data/weather.json", data)
+        print(f"  {desc}, {temp_min}~{temp_max}°C, 미세먼지: {dust}")
 
     except Exception as e:
         print(f"  ✗ 날씨 수집 실패: {e}")
-        # 실패해도 빈 구조를 저장해 프론트엔드가 깨지지 않게 합니다
         save_json("data/weather.json", {
             "last_updated": now_str(),
             "temp": None, "description": "수집 실패",
-            "outfit": "", "image": "", "link": ""
+            "outfit": "", "image": "", "link": "",
+            "date": today, "region": "서울",
+            "temp_min": None, "temp_max": None,
+            "rain": "", "dust": "",
         })
 
 
