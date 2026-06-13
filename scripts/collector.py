@@ -51,6 +51,10 @@ SEOUL_LON = 126.9780
 OPEN_METEO_FORECAST_URL = "https://api.open-meteo.com/v1/forecast"
 OPEN_METEO_AIR_QUALITY_URL = "https://air-quality-api.open-meteo.com/v1/air-quality"
 
+# 무신사 스냅(코디) 검색 — 짧은 키워드만 사용 (긴 조합은 결과 0건)
+MUSINSA_SNAP_SEARCH_URL = "https://www.musinsa.com/search/snap?keyword={keyword}"
+SNOW_WEATHER_CODES = {71, 73, 75, 77, 85, 86}
+
 # ── 날씨 코드 → 설명 매핑 (WMO Weather Interpretation Codes) ──
 WEATHER_CODES = {
     0: "맑음",
@@ -64,19 +68,41 @@ WEATHER_CODES = {
 }
 
 
-def get_outfit(temp_max, temp_min, rain):
-    """날씨 조건에 따라 코디 문장과 참고 이미지 URL을 반환합니다."""
+def musinsa_snap_link(keyword):
+    """날씨별 코디 스냅 검색 URL을 생성합니다."""
+    return MUSINSA_SNAP_SEARCH_URL.format(keyword=keyword)
+
+
+def get_outfit(temp_max, temp_min, rain, weather_code):
+    """날씨 조건에 따라 코디 문장, 이미지, 무신사 검색어를 반환합니다."""
     is_rainy = rain != "없음"
+    is_snowy = weather_code in SNOW_WEATHER_CODES
     temp_diff = temp_max - temp_min
 
-    if is_rainy:
+    if is_snowy:
+        text = (
+            f"최고 {temp_max}°C의 눈 오는 날씨입니다. "
+            "패딩, 방한 부츠, 머플러를 챙기세요. "
+            "미끄럼을 대비해 밑창이 튼튼한 신발을 추천합니다."
+        )
+        img = "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=60&auto=format"
+        keyword = "겨울+패딩"
+    elif is_rainy:
         text = (
             "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. "
             "어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. "
             "접이식 우산도 잊지 마세요."
         )
         img = "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format"
-        query = "레인코트+비+코디"
+        keyword = "레인코트"
+    elif temp_max >= 28:
+        text = (
+            f"최고 {temp_max}°C의 무더운 날씨입니다. "
+            "민소매, 반팔, 린넨 소재를 추천합니다. "
+            "통풍이 잘 되는 가벼운 신발을 매치해 보세요."
+        )
+        img = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format"
+        keyword = "민소매+코디"
     elif temp_max >= 27:
         text = (
             f"최고 {temp_max}°C의 더운 날씨입니다. "
@@ -84,7 +110,7 @@ def get_outfit(temp_max, temp_min, rain):
             "자외선 차단을 위해 선크림과 가벼운 모자를 챙기세요."
         )
         img = "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format"
-        query = "여름+반팔+코디"
+        keyword = "여름+반팔+코디"
     elif temp_max >= 18:
         if temp_diff >= 10:
             text = (
@@ -93,7 +119,7 @@ def get_outfit(temp_max, temp_min, rain):
                 "낮에는 가볍게 반팔 또는 얇은 긴팔 티셔츠를 입으세요."
             )
             img = "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=60&auto=format"
-            query = "봄+가을+가디건+코디"
+            keyword = "가디건+코디"
         else:
             text = (
                 "활동하기 좋은 선선한 날씨입니다. "
@@ -101,17 +127,33 @@ def get_outfit(temp_max, temp_min, rain):
                 "얇은 가디건을 하나 챙기면 완벽합니다."
             )
             img = "https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800&q=60&auto=format"
-            query = "봄+가을+맨투맨+코디"
-    else:
+            keyword = "맨투맨+코디"
+    elif temp_max >= 12:
+        text = (
+            f"최고 기온이 {temp_max}°C의 쌀쌀한 날씨입니다. "
+            "맨투맨, 자켓, 얇은 코트를 추천합니다. "
+            "레이어드로 체온을 조절해 보세요."
+        )
+        img = "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=60&auto=format"
+        keyword = "가을+자켓+코디"
+    elif temp_max >= 5:
         text = (
             f"최고 기온이 {temp_max}°C의 쌀쌀한 날씨입니다. "
             "니트, 코트, 머플러를 추천합니다. "
             "두꺼운 한 겹보다 얇은 레이어드 스타일이 체온 조절에 효과적입니다."
         )
         img = "https://images.unsplash.com/photo-1511401139252-f158d3209c17?w=800&q=60&auto=format"
-        query = "겨울+코트+코디"
+        keyword = "겨울+코트+코디"
+    else:
+        text = (
+            f"최고 기온이 {temp_max}°C의 추운 날씨입니다. "
+            "패딩, 두꺼운 코트, 목도리, 장갑을 챙기세요. "
+            "방한 부츠로 체온을 지켜 주세요."
+        )
+        img = "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=60&auto=format"
+        keyword = "겨울+패딩"
 
-    return text, img, query
+    return text, img, keyword
 
 
 def fetch_pm10_dust():
@@ -201,7 +243,9 @@ def collect_weather():
             print(f"  [경고] 공기질 수집 실패: {e}")
             dust = "정보 없음"
 
-        outfit_text, outfit_image, outfit_query = get_outfit(temp_max, temp_min, rain)
+        outfit_text, outfit_image, outfit_keyword = get_outfit(
+            temp_max, temp_min, rain, code
+        )
 
         data = {
             # 프론트엔드 호환 필드
@@ -210,10 +254,7 @@ def collect_weather():
             "description":  desc,
             "outfit":       outfit_text,
             "image":        outfit_image,
-            "link": (
-                "https://www.musinsa.com/search/musinsa/news"
-                f"?q={outfit_query}"
-            ),
+            "link":         musinsa_snap_link(outfit_keyword),
             # 추가 수집 필드 (향후 UI 확장용)
             "date":     today,
             "region":   "서울",
@@ -224,6 +265,7 @@ def collect_weather():
         }
         save_json("data/weather.json", data)
         print(f"  {desc}, {temp_min}~{temp_max}°C, 미세먼지: {dust}")
+        print(f"  코디 검색: {outfit_keyword}")
 
     except Exception as e:
         print(f"  ✗ 날씨 수집 실패: {e}")
