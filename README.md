@@ -1,67 +1,77 @@
-# 📄 Daily Insights — GitHub Pages 학습 예제
+# 📄 Daily Insights — GitHub Pages 자동화 예제
 
-GitHub Pages 배포, HTML/CSS/JS 기초, 자동화 연결을 한 번에 배울 수 있는 예제 프로젝트입니다.
+매일 GitHub Actions가 자동으로 데이터를 수집해서 페이지를 업데이트하는 학습용 프로젝트입니다.
 
 ---
 
 ## 📁 파일 구조
 
 ```
-/
-├── index.html                    # 메인 페이지 (뼈대)
-├── style.css                     # 스타일 (디자인)
-├── script.js                     # 기능 (명언 표시, 데이터 로드)
-├── data/
-│   └── contents.json             # 카드에 표시될 콘텐츠 데이터
-└── .github/
-    └── workflows/
-        └── update-data.yml       # GitHub Actions 자동화 예제
+claudeclonetest/
+├─ index.html                          # 페이지 뼈대 (구조)
+├─ style.css                           # 디자인
+├─ script.js                           # 기능 (JSON fetch & 렌더링)
+├─ requirements.txt                    # 파이썬 라이브러리 목록
+├─ data/
+│  ├─ weather.json                     # 날씨 + 코디 (Open-Meteo API)
+│  ├─ news.json                        # 네이버뉴스 스크래핑 결과
+│  ├─ finance.json                     # 시장 지수 (yfinance)
+│  └─ bizinfo.json                     # 기업마당 지원사업
+├─ scripts/
+│  └─ collector.py                     # 데이터 수집 스크립트 (한 파일)
+└─ .github/workflows/
+   ├─ daily-collect.yml                # 매일 KST 06:00 전체 수집
+   └─ supports-collect.yml            # 6시간마다 지원사업만 수집
 ```
 
 ---
 
 ## 🚀 GitHub Pages 배포 방법
 
-1. 이 파일들을 GitHub 저장소에 업로드합니다
-2. 저장소 **Settings → Pages** 로 이동합니다
-3. Source를 **"Deploy from a branch"**, Branch를 **main** 으로 설정합니다
-4. 저장 후 1~2분 뒤 `https://[아이디].github.io/[저장소명]` 으로 접속합니다
+1. 이 파일들을 저장소에 업로드합니다
+2. **Settings → Pages → Source: Deploy from a branch → main** 설정
+3. 1~2분 후 `https://jk0601.github.io/claudeclonetest` 접속
 
 ---
 
-## 📝 콘텐츠 수정 방법
+## 🤖 GitHub Actions 자동 실행 시각
 
-### 명언 추가/변경
-`script.js` 파일 상단의 `quotes` 배열에 항목을 추가하세요:
-```js
-{
-  text: "영어 명언",
-  translation: "한글 해석",
-  author: "출처"
-},
+| 워크플로우 | 실행 주기 | UTC cron |
+|-----------|---------|---------|
+| `daily-collect.yml` | 매일 오전 6시 (KST) | `0 21 * * *` |
+| `supports-collect.yml` | 6시간마다 | `0 */6 * * *` |
+
+---
+
+## 📊 수집 방식 요약
+
+| 데이터 | 방식 | 출처 |
+|--------|------|------|
+| 날씨·코디 | Open-Meteo 공개 API (키 불필요) | api.open-meteo.com |
+| 뉴스 | requests + BeautifulSoup 스크래핑 | news.naver.com/section/101 |
+| 시장 지수 | yfinance 라이브러리 | Yahoo Finance |
+| 지원사업 | requests + BeautifulSoup 스크래핑 | bizinfo.go.kr |
+
+---
+
+## 🎓 학습 핵심 흐름
+
 ```
-
-### 카드 내용 변경
-`data/contents.json` 파일을 직접 편집하세요.  
-각 `items` 배열 안에 항목을 추가/수정합니다.
-
----
-
-## 🤖 GitHub Actions 자동화 연결
-
-1. `update_data.py` 파이썬 스크립트를 작성합니다  
-   (뉴스 RSS, API 등에서 데이터를 수집하여 `data/contents.json`을 업데이트)
-2. `.github/workflows/update-data.yml` 이 매일 자동으로 스크립트를 실행합니다
-3. JSON이 업데이트되면 웹페이지도 자동으로 최신 내용을 표시합니다
-
----
-
-## 🎓 학습 포인트
+collector.py 실행
+  ├─ Open-Meteo API  →  data/weather.json
+  ├─ 네이버뉴스 스크래핑  →  data/news.json
+  ├─ yfinance  →  data/finance.json
+  └─ 기업마당 스크래핑  →  data/bizinfo.json
+       ↓
+GitHub Actions가 cron으로 자동 실행 & commit & push
+       ↓
+GitHub Pages가 JSON을 fetch()해서 화면에 카드로 표시
+```
 
 | 파일 | 배울 수 있는 것 |
 |------|----------------|
-| `index.html` | HTML 기본 구조, 시맨틱 태그, 외부 파일 연결 |
-| `style.css` | CSS 변수, Flexbox/Grid, 반응형(@media), 애니메이션 |
-| `script.js` | 배열/객체, fetch API, async/await, DOM 조작 |
-| `contents.json` | JSON 데이터 구조 설계 |
-| `update-data.yml` | GitHub Actions 스케줄 자동화 |
+| `index.html` | HTML 구조, 시맨틱 태그 |
+| `style.css` | CSS 변수, Grid/Flexbox, 반응형 |
+| `script.js` | fetch API, async/await, DOM 조작 |
+| `collector.py` | requests, BeautifulSoup, yfinance, JSON 저장 |
+| `daily-collect.yml` | GitHub Actions cron 자동화 |

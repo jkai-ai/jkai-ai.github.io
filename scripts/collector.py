@@ -1,0 +1,320 @@
+"""
+collector.py — 자동 수집 스크립트
+==================================================
+실행하면 4가지 데이터를 수집해서 data/ 폴더에 JSON으로 저장합니다.
+
+[수집 순서]
+  1. 날씨 + 코디  → data/weather.json   (Open-Meteo 공개 API)
+  2. 주요 뉴스    → data/news.json      (네이버뉴스 스크래핑)
+  3. 시장 지수    → data/finance.json   (yfinance 라이브러리)
+  4. 지원사업     → data/bizinfo.json   (기업마당 스크래핑)
+
+[실행 방법]
+  python scripts/collector.py
+
+[필요 라이브러리]
+  pip install -r requirements.txt
+"""
+
+import json
+import os
+import requests
+from bs4 import BeautifulSoup
+from datetime import datetime
+
+# ── 공통 설정 ──────────────────────────────────────────────────
+# 스크래핑 시 브라우저처럼 보이도록 헤더 설정 (차단 방지)
+HEADERS = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+        "AppleWebKit/537.36 (KHTML, like Gecko) "
+        "Chrome/124.0.0.0 Safari/537.36"
+    )
+}
+
+# ── URL / CSS 선택자 모음 ───────────────────────────────────────
+# 사이트 구조가 바뀌면 여기만 수정하면 됩니다
+NAVER_NEWS_URL = "https://news.naver.com/section/101"
+NAVER_NEWS_SELECTOR = ".sa_text_title"          # 뉴스 제목 선택자
+
+BIZINFO_URL = (
+    "https://www.bizinfo.go.kr/sii/siia/selectSIIA200View.do"
+    "?schAreaDetailCodes=6110000,6410000"
+)
+BIZINFO_ROW_SELECTOR   = "table tbody tr"       # 테이블 행
+BIZINFO_TITLE_SELECTOR = "td:nth-of-type(3) a"  # 제목 링크
+BIZINFO_PERIOD_INDEX   = 4                       # 접수기간 열 번호
+
+OPEN_METEO_URL = (
+    "https://api.open-meteo.com/v1/forecast"
+    "?latitude=37.5665&longitude=126.9780"
+    "&current_weather=true&timezone=Asia%2FSeoul"
+)
+
+# ── 날씨 코드 → 설명 매핑 ──────────────────────────────────────
+# Open-Meteo WMO 날씨 코드표 (자주 쓰이는 것만 발췌)
+WMO_DESCRIPTIONS = {
+    0:  "맑음",
+    1:  "대체로 맑음", 2: "구름 조금", 3: "흐림",
+    45: "안개", 48: "짙은 안개",
+    51: "이슬비", 53: "이슬비", 55: "짙은 이슬비",
+    61: "비", 63: "비", 65: "강한 비",
+    71: "눈", 73: "눈", 75: "강한 눈",
+    80: "소나기", 81: "소나기", 82: "강한 소나기",
+    95: "뇌우", 96: "뇌우+우박", 99: "강한 뇌우+우박",
+}
+
+# ── 기온별 코디 정보 ───────────────────────────────────────────
+# 온도 구간(최소기온)을 내림차순으로 정렬해서 체크합니다
+OUTFIT_TABLE = [
+    {
+        "min_temp": 28,
+        "outfit": "민소매, 반팔, 반바지, 린넨 소재 추천",
+        "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format",
+        "query": "여름+민소매+코디"
+    },
+    {
+        "min_temp": 23,
+        "outfit": "반팔 티셔츠, 면 반바지, 얇은 원피스",
+        "image": "https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?w=800&q=60&auto=format",
+        "query": "여름+반팔+코디"
+    },
+    {
+        "min_temp": 18,
+        "outfit": "긴팔 셔츠, 얇은 가디건, 슬랙스 또는 청바지",
+        "image": "https://images.unsplash.com/photo-1490481651871-ab68de25d43d?w=800&q=60&auto=format",
+        "query": "봄+가을+가디건+코디"
+    },
+    {
+        "min_temp": 12,
+        "outfit": "맨투맨, 자켓, 청바지, 얇은 코트",
+        "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=60&auto=format",
+        "query": "가을+자켓+코디"
+    },
+    {
+        "min_temp": 5,
+        "outfit": "두꺼운 니트, 코트, 목도리, 레이어링 추천",
+        "image": "https://images.unsplash.com/photo-1512327428049-2a6dd4c3f0f3?w=800&q=60&auto=format",
+        "query": "겨울+코트+코디"
+    },
+    {
+        "min_temp": -99,
+        "outfit": "패딩, 두꺼운 코트, 목도리, 장갑, 방한 부츠",
+        "image": "https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=800&q=60&auto=format",
+        "query": "겨울+패딩+방한+코디"
+    },
+]
+
+
+def now_str():
+    """현재 시각을 '2026-06-14 06:00:00' 형식 문자열로 반환"""
+    return datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
+def save_json(path, data):
+    """
+    딕셔너리(data)를 JSON 파일로 저장합니다.
+    data/ 폴더가 없으면 자동으로 생성합니다.
+    """
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+    print(f"  ✓ 저장 완료: {path}")
+
+
+# ══════════════════════════════════════════════════════════════
+# 1. 날씨 + 코디  →  data/weather.json
+# ══════════════════════════════════════════════════════════════
+def collect_weather():
+    """
+    Open-Meteo 공개 API로 서울 날씨를 가져옵니다.
+    API 키가 필요 없고 무료입니다.
+    기온에 따라 코디 정보를 자동으로 매칭합니다.
+    """
+    print("\n[1] 날씨 수집 중...")
+    try:
+        # API 호출 (응답 형식: JSON)
+        res = requests.get(OPEN_METEO_URL, timeout=10)
+        res.raise_for_status()                      # HTTP 에러 시 예외 발생
+        raw = res.json()["current_weather"]
+
+        temp   = raw["temperature"]                 # 기온 (°C)
+        code   = raw["weathercode"]                 # 날씨 코드 (WMO 표준)
+        desc   = WMO_DESCRIPTIONS.get(code, "알 수 없음")
+
+        # 기온에 맞는 코디 찾기
+        outfit_info = OUTFIT_TABLE[-1]              # 기본값: 가장 추운 경우
+        for row in OUTFIT_TABLE:
+            if temp >= row["min_temp"]:
+                outfit_info = row
+                break
+
+        data = {
+            "last_updated": now_str(),
+            "temp":         temp,
+            "description":  desc,
+            "outfit":       outfit_info["outfit"],
+            "image":        outfit_info["image"],
+            "link":         f"https://www.musinsa.com/search/musinsa/news?q={outfit_info['query']}",
+        }
+        save_json("data/weather.json", data)
+
+    except Exception as e:
+        print(f"  ✗ 날씨 수집 실패: {e}")
+        # 실패해도 빈 구조를 저장해 프론트엔드가 깨지지 않게 합니다
+        save_json("data/weather.json", {
+            "last_updated": now_str(),
+            "temp": None, "description": "수집 실패",
+            "outfit": "", "image": "", "link": ""
+        })
+
+
+# ══════════════════════════════════════════════════════════════
+# 2. 네이버 뉴스  →  data/news.json
+# ══════════════════════════════════════════════════════════════
+def collect_naver_news():
+    """
+    네이버 뉴스 경제 섹션을 직접 스크래핑합니다.
+    requests로 HTML을 받아 BeautifulSoup으로 파싱합니다.
+    """
+    print("\n[2] 네이버 뉴스 수집 중...")
+    try:
+        res = requests.get(NAVER_NEWS_URL, headers=HEADERS, timeout=10)
+        res.raise_for_status()
+        soup = BeautifulSoup(res.text, "lxml")
+
+        items = []
+        # CSS 선택자로 뉴스 제목 링크 요소들을 가져옴
+        for tag in soup.select(NAVER_NEWS_SELECTOR)[:10]:
+            title = tag.get_text(strip=True)        # 태그 안의 텍스트
+            link  = tag.get("href", "")             # href 속성값
+            if title and link:
+                items.append({"title": title, "link": link})
+
+        data = {"last_updated": now_str(), "news": items}
+        save_json("data/news.json", data)
+        print(f"  수집된 뉴스: {len(items)}건")
+
+    except Exception as e:
+        print(f"  ✗ 뉴스 수집 실패: {e}")
+        save_json("data/news.json", {"last_updated": now_str(), "news": []})
+
+
+# ══════════════════════════════════════════════════════════════
+# 3. 주요 시장 지수  →  data/finance.json
+# ══════════════════════════════════════════════════════════════
+def collect_finance():
+    """
+    yfinance 라이브러리로 주요 지수의 현재가와 등락을 가져옵니다.
+    최근 2거래일 데이터로 전일 대비 변동률을 계산합니다.
+    """
+    print("\n[3] 시장 지수 수집 중...")
+    try:
+        import yfinance as yf
+
+        # 수집할 지수 목록 (이름: Yahoo Finance 심볼)
+        targets = {
+            "KOSPI":       "^KS11",
+            "S&P 500":     "^GSPC",
+            "반도체(SOX)": "^SOX",
+            "금(Gold)":    "GC=F",
+        }
+
+        items = []
+        for name, symbol in targets.items():
+            try:
+                # 최근 5일치 데이터를 가져와서 마지막 2개 사용
+                hist = yf.Ticker(symbol).history(period="5d")
+                if len(hist) < 2:
+                    continue
+
+                prev_close = float(hist["Close"].iloc[-2])  # 전일 종가
+                last_close = float(hist["Close"].iloc[-1])  # 당일 종가
+                change     = last_close - prev_close        # 절대 변동
+                percent    = (change / prev_close) * 100    # 퍼센트 변동
+
+                items.append({
+                    "name":    name,
+                    "price":   round(last_close, 2),
+                    "change":  round(change, 2),
+                    "percent": round(percent, 2),
+                })
+                print(f"  {name}: {last_close:.2f} ({percent:+.2f}%)")
+
+            except Exception as e:
+                print(f"  ✗ {name} 수집 실패: {e}")
+
+        save_json("data/finance.json", {"last_updated": now_str(), "items": items})
+
+    except ImportError:
+        print("  ✗ yfinance 미설치. pip install yfinance 실행 후 재시도하세요.")
+        save_json("data/finance.json", {"last_updated": now_str(), "items": []})
+    except Exception as e:
+        print(f"  ✗ 금융 수집 실패: {e}")
+        save_json("data/finance.json", {"last_updated": now_str(), "items": []})
+
+
+# ══════════════════════════════════════════════════════════════
+# 4. 기업마당 지원사업  →  data/bizinfo.json
+# ══════════════════════════════════════════════════════════════
+def collect_bizinfo_news():
+    """
+    기업마당(bizinfo.go.kr)에서 서울·경기 지원사업을 스크래핑합니다.
+    테이블 구조를 파싱해 제목, 링크, 접수기간을 저장합니다.
+    """
+    print("\n[4] 지원사업 수집 중...")
+    try:
+        res = requests.get(BIZINFO_URL, headers=HEADERS, timeout=15)
+        res.raise_for_status()
+        soup = BeautifulSoup(res.text, "lxml")
+
+        items = []
+        rows = soup.select(BIZINFO_ROW_SELECTOR)
+
+        for row in rows[:10]:
+            # 제목 링크 추출
+            title_tag = row.select_one(BIZINFO_TITLE_SELECTOR)
+            if not title_tag:
+                continue
+
+            title = title_tag.get_text(strip=True)
+            href  = title_tag.get("href", "")
+
+            # 상대경로 → 절대경로 변환
+            if href.startswith("/"):
+                href = "https://www.bizinfo.go.kr" + href
+
+            # 접수기간 열 추출 (0번 인덱스부터 시작하므로 -1)
+            cells  = row.find_all("td")
+            period = ""
+            if len(cells) > BIZINFO_PERIOD_INDEX - 1:
+                period = cells[BIZINFO_PERIOD_INDEX - 1].get_text(strip=True)
+
+            if title:
+                items.append({"title": title, "link": href, "period": period})
+
+        data = {"last_updated": now_str(), "items": items}
+        save_json("data/bizinfo.json", data)
+        print(f"  수집된 지원사업: {len(items)}건")
+
+    except Exception as e:
+        print(f"  ✗ 지원사업 수집 실패: {e}")
+        save_json("data/bizinfo.json", {"last_updated": now_str(), "items": []})
+
+
+# ══════════════════════════════════════════════════════════════
+# 실행 진입점
+# ══════════════════════════════════════════════════════════════
+if __name__ == "__main__":
+    print("=" * 50)
+    print("  데이터 수집 시작:", now_str())
+    print("=" * 50)
+
+    collect_weather()           # 1. 날씨
+    collect_naver_news()        # 2. 뉴스
+    collect_finance()           # 3. 시장 지수
+    collect_bizinfo_news()      # 4. 지원사업
+
+    print("\n" + "=" * 50)
+    print("  모든 수집 완료:", now_str())
+    print("=" * 50)

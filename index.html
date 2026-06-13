@@ -1,115 +1,127 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <!-- ── 메타 정보 ──
-       charset    : 한글이 깨지지 않도록 UTF-8 인코딩 지정
-       viewport   : 모바일에서 화면 크기에 맞게 표시
-       description: 검색 엔진에 보여줄 페이지 설명
+  <!--
+    index.html — 메인 페이지 뼈대
+    이 파일은 구조(Structure)만 담당합니다.
+    디자인 → style.css / 기능 → script.js 로 역할 분리
   -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="GitHub Pages 학습용 개인 홈페이지 — 매일 자동 수집되는 뉴스, AI, 경제 정보를 한눈에" />
-  <title>Daily Insights — GitHub Pages 예제</title>
+  <meta name="description" content="매일 자동 수집되는 뉴스·경제·날씨·지원사업 정보 모음" />
+  <title>Daily Insights</title>
 
-  <!-- 구글 폰트 (Noto Serif KR + Noto Sans KR) -->
+  <!-- 구글 폰트 (한글 지원) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600&family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- 외부 스타일시트 연결 -->
+  <!-- 스타일시트 -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-  <!-- ════════════════════════════════════════
-       헤더 — 사이트 로고와 상단 네비게이션
-  ════════════════════════════════════════ -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       헤더 — 로고 + 네비게이션
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <header>
     <div class="header-inner">
-      <!-- 로고: 클릭하면 페이지 최상단으로 이동 -->
-      <a href="#" class="site-logo">Daily<span>Insights</span></a>
+      <a href="#" class="logo">Daily<span>Insights</span></a>
       <nav>
-        <a href="#sections-container">뉴스</a>
+        <a href="#sec-weather">날씨</a>
+        <a href="#sec-news">뉴스</a>
+        <a href="#sec-finance">경제</a>
+        <a href="#sec-biz">지원사업</a>
         <a href="https://github.com/jk0601/claudeclonetest" target="_blank" rel="noopener">GitHub</a>
       </nav>
     </div>
   </header>
 
 
-  <!-- ════════════════════════════════════════
-       히어로 섹션 — 랜덤 명언 표시 영역
-       JavaScript가 페이지 로드 시 quotes 배열에서
-       하나를 골라 아래 요소들을 채워줍니다.
-  ════════════════════════════════════════ -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       히어로 — 랜덤 명언
+       script.js의 renderQuote()가 아래 id 요소들을 채워 줍니다.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <section class="hero">
-    <div class="quote-section">
-
-      <!-- 섹션 레이블 -->
-      <span class="quote-label">✦ Today's Quote</span>
-
-      <!-- 영어 명언 — script.js가 내용을 채워줌 -->
+    <div class="quote-wrap">
+      <span class="quote-label">✦ 오늘의 영어 명언</span>
       <blockquote>
-        <p id="quote-text" class="quote-text">명언을 불러오는 중...</p>
-        <p id="quote-translation" class="quote-translation"></p>
+        <p  id="quote-en"     class="quote-en">명언을 불러오는 중...</p>
+        <p  id="quote-ko"     class="quote-ko"></p>
         <footer id="quote-author" class="quote-author"></footer>
       </blockquote>
-
-      <!-- 클릭하면 다른 명언으로 교체 -->
-      <button id="quote-btn" class="quote-btn">
-        ↻ 다른 명언 보기
-      </button>
-
+      <button id="quote-btn" class="quote-btn">↻ 다른 명언 보기</button>
     </div>
   </section>
 
 
-  <!-- ════════════════════════════════════════
-       메인 콘텐츠 — 자동 수집 데이터 카드
-
-       [구조 설명]
-       - data/contents.json 파일을 읽어서 섹션·카드로 표시
-       - GitHub Actions가 매일 이 JSON 파일을 업데이트하면
-         페이지가 자동으로 최신 내용을 보여줍니다
-       - 처음에는 로딩 메시지, 로드 완료 후 카드로 교체됨
-  ════════════════════════════════════════ -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       메인 콘텐츠 영역
+       각 섹션의 *-body 요소는 script.js가 동적으로 채워 줍니다.
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <main>
 
-    <!-- 마지막 업데이트 시각 표시 -->
-    <p style="text-align:right; font-size:0.8rem; color:#8e8e99; margin-bottom: 8px;">
-      <span id="last-updated"></span>
-    </p>
+    <!-- ① 날씨 + 코디 ─────────────────────────────── -->
+    <section id="sec-weather" class="section">
+      <div class="section-head">
+        <h2 class="section-title">🌤️ 오늘의 날씨와 추천 코디</h2>
+        <!-- script.js가 업데이트 시각을 여기에 넣어 줌 -->
+      </div>
+      <div id="weather-body">
+        <div class="loading-msg">날씨 정보를 불러오는 중...</div>
+      </div>
+    </section>
 
-    <!-- script.js의 loadContents()가 이 안을 채워줍니다 -->
-    <div id="sections-container">
-      <!-- 자바스크립트가 비활성화된 경우를 위한 대비 메시지 -->
-      <noscript>
-        <p style="text-align:center; padding: 48px; color: #8e8e99;">
-          JavaScript를 활성화해야 콘텐츠를 볼 수 있습니다.
-        </p>
-      </noscript>
-    </div>
+    <!-- ② 주요 뉴스 ────────────────────────────────── -->
+    <section id="sec-news" class="section">
+      <div class="section-head">
+        <h2 class="section-title">📰 오늘의 주요 뉴스</h2>
+        <span id="news-meta" class="section-meta"></span>
+      </div>
+      <div id="news-body">
+        <div class="loading-msg">뉴스를 불러오는 중...</div>
+      </div>
+    </section>
+
+    <!-- ③ 경제/시장 체크 ────────────────────────────── -->
+    <section id="sec-finance" class="section">
+      <div class="section-head">
+        <h2 class="section-title">💹 경제/시장 체크</h2>
+        <span id="finance-meta" class="section-meta"></span>
+      </div>
+      <div id="finance-body">
+        <div class="loading-msg">시장 데이터를 불러오는 중...</div>
+      </div>
+    </section>
+
+    <!-- ④ 서울·경기 지원사업 ─────────────────────────── -->
+    <section id="sec-biz" class="section">
+      <div class="section-head">
+        <h2 class="section-title">🏢 서울·경기 지원사업 정보</h2>
+        <span id="biz-meta" class="section-meta"></span>
+      </div>
+      <div id="biz-body">
+        <div class="loading-msg">지원사업 정보를 불러오는 중...</div>
+      </div>
+    </section>
 
   </main>
 
 
-  <!-- ════════════════════════════════════════
-       푸터 — 저작권 및 링크
-  ════════════════════════════════════════ -->
+  <!-- ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+       푸터
+  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ -->
   <footer>
-    <div class="footer-inner">
-      <p>
-        © 2026 Daily Insights &nbsp;·&nbsp;
-        <a href="https://github.com/jk0601/claudeclonetest" target="_blank" rel="noopener">GitHub 저장소</a>
-        &nbsp;·&nbsp; GitHub Pages로 배포
-      </p>
-      <p style="margin-top: 6px; font-size: 0.76rem;">
-        이 페이지는 GitHub Actions로 매일 자동 업데이트됩니다.
-      </p>
-    </div>
+    <p>
+      © 2026 Daily Insights &nbsp;·&nbsp;
+      <a href="https://github.com/jk0601/claudeclonetest" target="_blank" rel="noopener">GitHub 저장소</a>
+      &nbsp;·&nbsp; GitHub Pages + GitHub Actions 자동화
+    </p>
+    <p>날씨: Open-Meteo API &nbsp;·&nbsp; 뉴스: 네이버뉴스 &nbsp;·&nbsp; 지수: yfinance &nbsp;·&nbsp; 지원사업: 기업마당</p>
   </footer>
 
 
-  <!-- 자바스크립트 파일 연결 (body 끝에 두어야 HTML이 먼저 로드됨) -->
+  <!-- JS 파일은 body 끝에 두어야 HTML이 먼저 렌더링됩니다 -->
   <script src="script.js"></script>
 
 </body>
