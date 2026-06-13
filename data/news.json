@@ -1,15 +1,45 @@
 {
-  "last_updated": "2026-06-14 06:00:00",
+  "last_updated": "2026-06-13 15:17:31",
   "news": [
-    { "title": "AI 기술, 의료 진단 정확도 획기적으로 향상", "link": "https://news.naver.com/" },
-    { "title": "코스피 2,800선 돌파, 외국인 순매수 15거래일 연속", "link": "https://news.naver.com/" },
-    { "title": "반도체 수출 전년 대비 32% 급증, 역대 최고 기록", "link": "https://news.naver.com/" },
-    { "title": "원달러 환율 1,320원대 안정세, 수출 기업 숨통", "link": "https://news.naver.com/" },
-    { "title": "오픈소스 AI 모델 생태계 빠르게 성장", "link": "https://news.naver.com/" },
-    { "title": "한국은행, 기준금리 동결 결정…물가·경기 동시 고려", "link": "https://news.naver.com/" },
-    { "title": "청년 창업 지원 예산 올해 역대 최고 규모 편성", "link": "https://news.naver.com/" },
-    { "title": "전기차 배터리 기술 혁신, 충전시간 10분대로 단축", "link": "https://news.naver.com/" },
-    { "title": "글로벌 공급망 재편 가속…한국 기업 수혜 기대", "link": "https://news.naver.com/" },
-    { "title": "부동산 PF 리스크 완화 조짐, 금융시장 안도", "link": "https://news.naver.com/" }
+    {
+      "title": "8%씩 오르락내리락 ‘롤러코스피’에… 개미들 “집단 조울증 걸릴 판”",
+      "link": "https://n.news.naver.com/mnews/article/023/0003981818"
+    },
+    {
+      "title": "스페이스X 상장 첫날 11% 급등…머스크, 세계 첫 '조만장자' 등극",
+      "link": "https://n.news.naver.com/mnews/article/277/0005775796"
+    },
+    {
+      "title": "LIG D&A, 니어스랩과 요격드론 협력…통합방공망 시장 노린다",
+      "link": "https://n.news.naver.com/mnews/article/374/0000515711"
+    },
+    {
+      "title": "“대~한민국” 광화문 들썩이자 편의점 매출도 ‘대박’",
+      "link": "https://n.news.naver.com/mnews/article/016/0002656066"
+    },
+    {
+      "title": "1분기 증권사 순이익 4조원대… 2025년 전체 수익의 45% 거둬",
+      "link": "https://n.news.naver.com/mnews/article/022/0004134994"
+    },
+    {
+      "title": "취업자 17개월 만에 감소세…노동부 “고용유지지원금 적극 활용”",
+      "link": "https://n.news.naver.com/mnews/article/028/0002809410"
+    },
+    {
+      "title": "\"2만원에 티켓 샀다\" 일본여행 수요 폭발하는데…'초비상'",
+      "link": "https://n.news.naver.com/mnews/article/015/0005298385"
+    },
+    {
+      "title": "거래량 '쑥' 오른 동탄…\"더 오르겠네\" 계좌 잠그는 집주인들",
+      "link": "https://n.news.naver.com/mnews/article/003/0014004332"
+    },
+    {
+      "title": "스페이스 X 상장에 국장 출렁였는데...성공 데뷔 영향은?",
+      "link": "https://n.news.naver.com/mnews/article/052/0002366006"
+    },
+    {
+      "title": "종전 합의 기대감에…주유소 기름값 4주 연속 하락",
+      "link": "https://n.news.naver.com/mnews/article/055/0001364052"
+    }
   ]
 }
