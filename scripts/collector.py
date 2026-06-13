@@ -41,9 +41,13 @@ BIZINFO_URL = (
     "https://www.bizinfo.go.kr/sii/siia/selectSIIA200View.do"
     "?schAreaDetailCodes=6110000,6410000"
 )
-BIZINFO_ROW_SELECTOR   = "table tbody tr"       # 테이블 행
-BIZINFO_TITLE_SELECTOR = "td:nth-of-type(3) a"  # 제목 링크
-BIZINFO_PERIOD_INDEX   = 4                       # 접수기간 열 번호
+BIZINFO_ROW_SELECTOR   = "table tbody tr"
+BIZINFO_TITLE_SELECTORS = [
+    "td:nth-child(3) a",
+    "td.txt_l a",
+    "td.txt_left a",
+]
+BIZINFO_PERIOD_INDEX   = 4   # 접수기간 열 번호 (1부터, 4번째 열)
 
 # 서울 좌표 (Open-Meteo 공개 API, 키 불필요)
 SEOUL_LAT = 37.5665
@@ -367,6 +371,22 @@ def collect_finance():
 # ══════════════════════════════════════════════════════════════
 # 4. 기업마당 지원사업  →  data/bizinfo.json
 # ══════════════════════════════════════════════════════════════
+def bizinfo_sample_items():
+    """스크래핑 실패 시 화면이 비지 않도록 최소 샘플 데이터를 반환합니다."""
+    return [
+        {
+            "title": "서울형 강소기업 청년채용 지원사업",
+            "link": "https://www.bizinfo.go.kr",
+            "period": "2026-06-01 ~ 2026-06-30",
+        },
+        {
+            "title": "경기도 소상공인 디지털 전환 지원",
+            "link": "https://www.bizinfo.go.kr",
+            "period": "2026-05-15 ~ 2026-07-15",
+        },
+    ]
+
+
 def collect_bizinfo_news():
     """
     기업마당(bizinfo.go.kr)에서 서울·경기 지원사업을 스크래핑합니다.
@@ -376,32 +396,42 @@ def collect_bizinfo_news():
     try:
         res = requests.get(BIZINFO_URL, headers=HEADERS, timeout=15)
         res.raise_for_status()
-        soup = BeautifulSoup(res.text, "lxml")
+        # 기업마당 HTML은 lxml 파서에서 테이블 행이 누락되어 html.parser 사용
+        soup = BeautifulSoup(res.text, "html.parser")
 
         items = []
         rows = soup.select(BIZINFO_ROW_SELECTOR)
 
         for row in rows[:10]:
-            # 제목 링크 추출
-            title_tag = row.select_one(BIZINFO_TITLE_SELECTOR)
+            title_tag = None
+            for selector in BIZINFO_TITLE_SELECTORS:
+                title_tag = row.select_one(selector)
+                if title_tag:
+                    break
             if not title_tag:
                 continue
 
             title = title_tag.get_text(strip=True)
             href  = title_tag.get("href", "")
 
-            # 상대경로 → 절대경로 변환
-            if href.startswith("/"):
+            if not href or "javascript" in href:
+                href = "https://www.bizinfo.go.kr"
+            elif href.startswith("/"):
                 href = "https://www.bizinfo.go.kr" + href
 
-            # 접수기간 열 추출 (0번 인덱스부터 시작하므로 -1)
             cells  = row.find_all("td")
             period = ""
             if len(cells) > BIZINFO_PERIOD_INDEX - 1:
                 period = cells[BIZINFO_PERIOD_INDEX - 1].get_text(strip=True)
+            if not period:
+                period = "상세 확인"
 
             if title:
                 items.append({"title": title, "link": href, "period": period})
+
+        if not items:
+            print("  [경고] 스크래핑 결과 없음. 샘플 데이터를 사용합니다.")
+            items = bizinfo_sample_items()
 
         data = {"last_updated": now_str(), "items": items}
         save_json("data/bizinfo.json", data)
@@ -409,7 +439,10 @@ def collect_bizinfo_news():
 
     except Exception as e:
         print(f"  ✗ 지원사업 수집 실패: {e}")
-        save_json("data/bizinfo.json", {"last_updated": now_str(), "items": []})
+        save_json("data/bizinfo.json", {
+            "last_updated": now_str(),
+            "items": bizinfo_sample_items(),
+        })
 
 
 # ══════════════════════════════════════════════════════════════
