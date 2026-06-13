@@ -100,7 +100,26 @@ main { max-width: var(--max); margin: 0 auto; padding: 44px 24px 80px; }
   margin-bottom: 20px;
 }
 .section-title { font-size: 1.05rem; font-weight: 700; color: var(--text-main); }
-.section-meta  { font-size: .75rem; color: var(--text-muted); }
+.section-meta  { font-size: .75rem; color: var(--accent); font-weight: 600; }
+
+/* 수집 메타 정보 박스 */
+.collect-info {
+  font-size: .8rem;
+  color: var(--text-body);
+  background: rgba(61, 107, 79, .06);
+  border-left: 3px solid var(--accent);
+  padding: 10px 14px;
+  border-radius: 0 8px 8px 0;
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+/* 날짜 강조 표시 */
+.section-date {
+  font-size: .82rem;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
 
 /* 데이터 준비 중 메시지 */
 .loading-msg {
@@ -124,6 +143,12 @@ main { max-width: var(--max); margin: 0 auto; padding: 44px 24px 80px; }
 .weather-body {
   padding: 28px 28px;
   display: flex; flex-direction: column; justify-content: center; gap: 10px;
+}
+.weather-date-label {
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-main);
 }
 .weather-temp {
   font-size: 2.6rem; font-weight: 700;

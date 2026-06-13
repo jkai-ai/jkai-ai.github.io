@@ -56,6 +56,52 @@ function pendingHTML(msg = "데이터를 준비 중입니다 🔄") {
   return `<div class="loading-msg">${msg}</div>`;
 }
 
+const WEEKDAYS_FULL  = ["일요일", "월요일", "화요일", "수요일", "목요일", "금요일", "토요일"];
+const WEEKDAYS_SHORT = ["일", "월", "화", "수", "목", "금", "토"];
+
+/** "2026-06-14" 또는 "2026-06-14 01:09:22" → Date 객체 */
+function parseDateInput(value) {
+  if (!value) return null;
+  const normalized = String(value).trim().replace(" ", "T");
+  const date = new Date(normalized);
+  return Number.isNaN(date.getTime()) ? null : date;
+}
+
+/** 2026년 06월 14일 (토요일) */
+function formatDateLong(value) {
+  const date = parseDateInput(value);
+  if (!date) return "";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}년 ${m}월 ${d}일 (${WEEKDAYS_FULL[date.getDay()]})`;
+}
+
+/** 2026년 06월 14일 (토) */
+function formatDateShort(value) {
+  const date = parseDateInput(value);
+  if (!date) return "";
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}년 ${m}월 ${d}일 (${WEEKDAYS_SHORT[date.getDay()]})`;
+}
+
+/** 섹션 제목에 날짜를 붙입니다. */
+function setSectionTitle(id, baseTitle, dateValue) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const dateLabel = formatDateShort(dateValue);
+  el.textContent = dateLabel ? `${baseTitle} — ${dateLabel}` : baseTitle;
+}
+
+/** 수집 메타 정보 박스 HTML */
+function collectInfoHTML(parts) {
+  const text = parts.filter(Boolean).join(" | ");
+  if (!text) return "";
+  return `<div class="collect-info">${text}</div>`;
+}
+
 
 /* ══════════════════════════════════════════════════════════
    2. 명언 렌더링
@@ -73,7 +119,8 @@ function renderQuote() {
    3. 날씨 + 코디
    ══════════════════════════════════════════════════════════ */
 async function renderWeather() {
-  const el = document.getElementById("weather-body");
+  const el   = document.getElementById("weather-body");
+  const meta = document.getElementById("weather-meta");
   const data = await fetchJSON("data/weather.json");
 
   if (!data || data.temp === null) {
@@ -81,13 +128,30 @@ async function renderWeather() {
     return;
   }
 
-  // temp가 null이 아닌 경우에만 표시
+  const dateValue = data.date || data.last_updated;
+  setSectionTitle("weather-title", "🌤️ 오늘의 날씨와 추천 코디", dateValue);
+  if (meta) meta.textContent = "자동 수집";
+
+  const tempRange = (data.temp_min != null && data.temp_max != null)
+    ? `${data.temp_min}~${data.temp_max}°C`
+    : `${data.temp}°C`;
+
   el.innerHTML = `
+    ${collectInfoHTML([
+      `수집 시각: ${data.last_updated || "-"}`,
+      data.region ? `지역: ${data.region}` : "",
+      `기온: ${tempRange}`,
+      data.rain ? `강수: ${data.rain}` : "",
+      data.dust ? `미세먼지: ${data.dust}` : "",
+      "출처: Open-Meteo API",
+    ])}
+    <p class="section-date">${formatDateLong(dateValue)}</p>
     <div class="weather-card">
       ${data.image
         ? `<img src="${data.image}" alt="날씨 코디 이미지" class="weather-img">`
         : ""}
       <div class="weather-body">
+        <p class="weather-date-label">오늘의 코디</p>
         <div class="weather-temp">
           ${data.temp}<span>°C · ${data.description}</span>
         </div>
@@ -101,9 +165,6 @@ async function renderWeather() {
           : ""}
       </div>
     </div>
-    <p style="font-size:.75rem;color:var(--text-muted);margin-top:8px;text-align:right;">
-      업데이트: ${data.last_updated || ""}
-    </p>
   `;
 }
 
@@ -121,10 +182,16 @@ async function renderNews() {
     return;
   }
 
-  if (meta) meta.textContent = "업데이트: " + (data.last_updated || "");
+  const dateValue = data.date || data.last_updated;
+  setSectionTitle("news-title", "📰 오늘의 주요 뉴스", dateValue);
+  if (meta) meta.textContent = "자동 수집";
 
-  // map(): 배열의 각 요소를 변환하여 새 배열 반환 → join('')으로 합쳐서 HTML 문자열 생성
   el.innerHTML = `
+    ${collectInfoHTML([
+      `수집 시각: ${data.last_updated || "-"}`,
+      `뉴스 ${data.news.length}건`,
+      "출처: 네이버뉴스 경제",
+    ])}
     <div class="news-list">
       ${data.news.map((item, i) => `
         <a href="${item.link}" target="_blank" rel="noopener" class="news-item">
@@ -151,9 +218,17 @@ async function renderFinance() {
     return;
   }
 
-  if (meta) meta.textContent = "업데이트: " + (data.last_updated || "");
+  const dateValue = data.last_updated;
+  setSectionTitle("finance-title", "💹 경제/시장 체크", dateValue);
+
+  if (meta) meta.textContent = "자동 수집";
 
   el.innerHTML = `
+    ${collectInfoHTML([
+      `수집 시각: ${data.last_updated || "-"}`,
+      `지수 ${data.items.length}건`,
+      "출처: Yahoo Finance (yfinance)",
+    ])}
     <div class="finance-grid">
       ${data.items.map(item => {
         // 등락 방향에 따라 CSS 클래스와 아이콘 결정
@@ -190,9 +265,17 @@ async function renderBizinfo() {
     return;
   }
 
-  if (meta) meta.textContent = "업데이트: " + (data.last_updated || "");
+  const dateValue = data.last_updated;
+  setSectionTitle("biz-title", "🏢 서울·경기 지원사업 정보", dateValue);
+
+  if (meta) meta.textContent = "자동 수집";
 
   el.innerHTML = `
+    ${collectInfoHTML([
+      `수집 시각: ${data.last_updated || "-"}`,
+      `공고 ${data.items.length}건`,
+      "출처: 기업마당",
+    ])}
     <div class="biz-grid">
       ${data.items.map(item => `
         <div class="biz-card">
