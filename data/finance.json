@@ -1,29 +1,29 @@
 {
-  "last_updated": "2026-06-29 12:50:02",
+  "last_updated": "2026-06-30 08:46:10",
   "items": [
     {
       "name": "KOSPI",
-      "price": 8394.65,
-      "change": -16.56,
-      "percent": -0.2
+      "price": 8476.48,
+      "change": 81.83,
+      "percent": 0.97
     },
     {
       "name": "S&P 500",
-      "price": 7354.02,
-      "change": -3.47,
-      "percent": -0.05
+      "price": 7440.43,
+      "change": 86.41,
+      "percent": 1.18
     },
     {
       "name": "반도체(SOX)",
-      "price": 13203.57,
-      "change": -737.3,
-      "percent": -5.29
+      "price": 13709.66,
+      "change": 506.09,
+      "percent": 3.83
     },
     {
       "name": "금(Gold)",
-      "price": 4059.1,
-      "change": -19.6,
-      "percent": -0.48
+      "price": 4037.0,
+      "change": 14.7,
+      "percent": 0.37
     }
   ]
 }
