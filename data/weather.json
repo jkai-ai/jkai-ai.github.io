@@ -1,14 +1,14 @@
 {
-  "last_updated": "2026-07-13 23:38:52",
-  "temp": 31,
-  "description": "강한 비",
+  "last_updated": "2026-07-14 21:57:52",
+  "temp": 28,
+  "description": "비",
   "outfit": "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. 어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. 접이식 우산도 잊지 마세요.",
   "image": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format",
   "link": "https://www.musinsa.com/search/snap?keyword=레인코트",
-  "date": "2026-07-13",
+  "date": "2026-07-14",
   "region": "서울",
-  "temp_min": 25,
-  "temp_max": 31,
-  "rain": "27.9mm 예상",
-  "dust": "좋음 (14㎍/㎥)"
+  "temp_min": 23,
+  "temp_max": 28,
+  "rain": "4.6mm 예상",
+  "dust": "보통 (35㎍/㎥)"
 }
