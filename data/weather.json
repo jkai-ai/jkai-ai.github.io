@@ -1,14 +1,14 @@
 {
-  "last_updated": "2026-07-17 21:54:05",
+  "last_updated": "2026-07-18 21:51:13",
   "temp": 28,
-  "description": "강한 비",
-  "outfit": "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. 어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. 접이식 우산도 잊지 마세요.",
-  "image": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format",
-  "link": "https://www.musinsa.com/search/snap?keyword=레인코트",
-  "date": "2026-07-17",
+  "description": "흐림",
+  "outfit": "최고 28°C의 무더운 날씨입니다. 민소매, 반팔, 린넨 소재를 추천합니다. 통풍이 잘 되는 가벼운 신발을 매치해 보세요.",
+  "image": "https://images.unsplash.com/photo-1523381210434-271e8be1f52b?w=800&q=60&auto=format",
+  "link": "https://www.musinsa.com/search/snap?keyword=민소매+코디",
+  "date": "2026-07-18",
   "region": "서울",
   "temp_min": 22,
   "temp_max": 28,
-  "rain": "76.2mm 예상",
-  "dust": "좋음 (6㎍/㎥)"
+  "rain": "없음",
+  "dust": "좋음 (14㎍/㎥)"
 }
