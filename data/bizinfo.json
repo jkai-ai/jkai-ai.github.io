@@ -1,15 +1,55 @@
 {
-  "last_updated": "2026-07-30 14:08:37",
+  "last_updated": "2026-07-30 19:36:26",
   "items": [
     {
-      "title": "서울형 강소기업 청년채용 지원사업",
-      "link": "https://www.bizinfo.go.kr",
-      "period": "2026-06-01 ~ 2026-06-30"
+      "title": "[경기] 남양주시 2026년 사물인터넷(IoT) 측정기기 부착 지원사업 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124923",
+      "period": "2026-07-29 ~ 2026-08-31"
     },
     {
-      "title": "경기도 소상공인 디지털 전환 지원",
-      "link": "https://www.bizinfo.go.kr",
-      "period": "2026-05-15 ~ 2026-07-15"
+      "title": "[경기] 안산시 2026년 2차 로봇직업교육센터 구축사업 제조기업 로봇공정 성능개선 지원사업 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124921",
+      "period": "2026-07-29 ~ 2026-08-21"
+    },
+    {
+      "title": "[서울] 2026년 서울형 가족 뿌리기업, 전문 뿌리기업 통합 모집 추가 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124911",
+      "period": "2026-07-29 ~ 2026-08-20"
+    },
+    {
+      "title": "[경기] 평택시 2026년 3차 해외플랫폼 입점 지원사업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124901",
+      "period": "2026-07-27 ~ 2026-08-31"
+    },
+    {
+      "title": "[서울] 2026년 3차 서울커리업 인턴십 참여기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124880",
+      "period": "2026-07-28 ~ 2026-08-11"
+    },
+    {
+      "title": "[서울] 강남구 2026년 LA K-프리미엄 소비재전 참가기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124871",
+      "period": "2026-07-28 ~ 2026-08-05"
+    },
+    {
+      "title": "[경기] 화성시 2026년 중소기업 노동자 기숙사 임차비 지원사업 참여기업 추가모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124854",
+      "period": "2026-07-27 ~ 2026-08-11"
+    },
+    {
+      "title": "[경기] 화성시 2026년 2차 공공기관 해외지사화 참가 지원사업 참가기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124852",
+      "period": "2026-07-28 ~ 2026-08-21"
+    },
+    {
+      "title": "[경기] 시흥시 2026년 소규모 점포 시설개선 지원사업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124845",
+      "period": "2026-07-27 ~ 2026-08-18"
+    },
+    {
+      "title": "2026년 시흥바이오 소부장 캡스톤 경진대회 참여기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000124844",
+      "period": "2026-07-27 ~ 2026-08-10"
     }
   ]
 }
