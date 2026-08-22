@@ -1,11 +1,11 @@
 {
-  "last_updated": "2026-08-21 21:23:48",
+  "last_updated": "2026-08-22 21:21:00",
   "items": [
     {
       "name": "KOSPI",
-      "price": NaN,
-      "change": NaN,
-      "percent": NaN
+      "price": 6912.95,
+      "change": 60.37,
+      "percent": 0.88
     },
     {
       "name": "S&P 500",
@@ -21,9 +21,9 @@
     },
     {
       "name": "금(Gold)",
-      "price": 4661.6,
-      "change": 145.3,
-      "percent": 3.22
+      "price": 4624.1,
+      "change": 107.8,
+      "percent": 2.39
     }
   ]
 }
