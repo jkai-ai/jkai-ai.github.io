@@ -1,15 +1,55 @@
 {
-  "last_updated": "2026-09-03 03:35:18",
+  "last_updated": "2026-09-03 10:53:15",
   "items": [
     {
-      "title": "서울형 강소기업 청년채용 지원사업",
-      "link": "https://www.bizinfo.go.kr",
-      "period": "2026-06-01 ~ 2026-06-30"
+      "title": "[경기] 안산시 2026년 하반기 착한가격업소 신규 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126145",
+      "period": "2026-09-01 ~ 2026-10-02"
     },
     {
-      "title": "경기도 소상공인 디지털 전환 지원",
-      "link": "https://www.bizinfo.go.kr",
-      "period": "2026-05-15 ~ 2026-07-15"
+      "title": "[경기] 안산시 2026년 천일염 생산ㆍ유통시설 지원 사업 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126144",
+      "period": "2026-09-01 ~ 2026-09-08"
+    },
+    {
+      "title": "[경기] 안산시 2026년 동남아 해외시장개척단 참가기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126143",
+      "period": "2026-09-02 ~ 2026-09-16"
+    },
+    {
+      "title": "[경기] 성남시 2026년 현장노동자 휴게시설 개선 지원사업 추가 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126142",
+      "period": "2026-09-02 ~ 2026-09-16"
+    },
+    {
+      "title": "[경기] 수원시 2027년 기업환경 개선사업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126141",
+      "period": "2026-09-01 ~ 2026-09-18"
+    },
+    {
+      "title": "[경기] 수원시 2026년 하반기 착한가격업소 신규지정 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126138",
+      "period": "수시 접수"
+    },
+    {
+      "title": "2026년 3차 서울테크노파크 수요기술조사사업 참여기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126100",
+      "period": "2026-09-02 ~ 2026-12-31"
+    },
+    {
+      "title": "2026년 광명시 기업박람회(GM TECH EXPO 2026) 참가기업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126072",
+      "period": "2026-08-25 ~ 2026-09-22"
+    },
+    {
+      "title": "[경기] 안양시 2026년 유망기업 인플루언서 연계 판로개척 지원사업 모집 공고",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126061",
+      "period": "2026-09-17 ~ 2026-09-18"
+    },
+    {
+      "title": "[경기] 2026년 스페인 TEXTILE EXPO 전시회(공동관) 참가기업 모집 공고(경기섬유마케팅센터)",
+      "link": "https://www.bizinfo.go.kr/sii/siia/selectSIIA200Detail.do?hashCode=&rowsSel=&rows=15&cpage=&cat=&schPblancDiv=&schJrsdCodeTy=&schWntyAt=&schAreaDetailCodes=6110000%2C6410000&schEndAt=N&orderGb=&sort=&preKeywords=&condition=&condition1=&keyword=&pblancId=PBLN_000000000126054",
+      "period": "2026-08-31 ~ 2026-09-11"
     }
   ]
 }
