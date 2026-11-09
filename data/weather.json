@@ -1,14 +1,14 @@
 {
-  "last_updated": "2026-11-08 00:13:11",
-  "temp": 7,
-  "description": "진한 이슬비",
-  "outfit": "비 오는 날엔 방수 재킷이나 레인코트를 챙기세요. 어두운 색 하의와 방수 신발로 마무리하면 실용적입니다. 접이식 우산도 잊지 마세요.",
-  "image": "https://images.unsplash.com/photo-1558769132-cb1aea458c5e?w=800&q=60&auto=format",
-  "link": "https://www.musinsa.com/search/snap?keyword=레인코트",
-  "date": "2026-11-08",
+  "last_updated": "2026-11-09 00:34:28",
+  "temp": 12,
+  "description": "부분적으로 흐림",
+  "outfit": "최고 기온이 12°C의 쌀쌀한 날씨입니다. 맨투맨, 자켓, 얇은 코트를 추천합니다. 레이어드로 체온을 조절해 보세요.",
+  "image": "https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=800&q=60&auto=format",
+  "link": "https://www.musinsa.com/search/snap?keyword=가을+자켓+코디",
+  "date": "2026-11-09",
   "region": "서울",
-  "temp_min": 3,
-  "temp_max": 7,
-  "rain": "6.0mm 예상",
-  "dust": "좋음 (18㎍/㎥)"
+  "temp_min": 4,
+  "temp_max": 12,
+  "rain": "없음",
+  "dust": "좋음 (6㎍/㎥)"
 }
